@@ -1,0 +1,34 @@
+[
+    {
+        "question": "What color is the sky?",
+        "answer1": "Blue",
+        "answer2": "Green",
+        "answer3": "Red",
+        "answer4": "Yellow",
+        "correctAnswer": 1
+    },
+    {
+        "question": "Which planet is closest to the Sun?",
+        "answer1": "Earth",
+        "answer2": "Mars",
+        "answer3": "Venus",
+        "answer4": "Mercury",
+        "correctAnswer": 4
+    },
+    {
+        "question": "What is the capital of France?",
+        "answer1": "Berlin",
+        "answer2": "Paris",
+        "answer3": "Rome",
+        "answer4": "London",
+        "correctAnswer": 2
+    },
+    {
+        "question": "What is the world's largest ocean?",
+        "answer1": "Pacific Ocean",
+        "answer2": "Atlantic Ocean",
+        "answer3": "Indian Ocean",
+        "answer4": "Arctic Ocean",
+        "correctAnswer": 1
+    }
+]
