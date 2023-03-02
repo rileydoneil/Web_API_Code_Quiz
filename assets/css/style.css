@@ -37,7 +37,20 @@ header {
     color: whitesmoke;
   }
 
+  .submissionArea {
+    display: none;
+    flex-direction: column;
+    justify-items: space-between;
+  }
+
+  #submit {
+    background-color: var(--purple);
+    color: whitesmoke;
+    
+  }
+
   .question :hover {
     background-color: var(--pink);
   }
+
   
