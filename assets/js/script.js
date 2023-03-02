@@ -4,27 +4,33 @@ var timeEl = document.querySelector(".time");
 var startEl = document.querySelector("#start");
 var titleEl = document.querySelector("#title");
 var questionArea = document.querySelector(".questionArea");
-var question = document.querySelector("#question")
-// var answer1 = document.querySelector("#A1");
-// var answer2 = document.querySelector("#A2")
-// var answer3 = document.querySelector("#A3");
-// var answer4 = document.querySelector("#A4");
+var answerList = document.querySelector("#answerList").children;
+var question = document.querySelector("#question");
+var submissionArea = document.querySelector(".submissionArea");
+var submitButton = document.querySelector("#submit");
+var highScores = [];
+//setup conditions
 var questionNumnber = 0;
-
 var secondsLeft = 120;
+
+//grab local storage
+function renderHighScore() {
+  highScores = localStorage.getItem("scoreData");
+  console.log(highScores);
+  return;
+}
+
+renderHighScore();
 
   //first init of game
 function startGame(event) {
-    var element = event.target;
     getJSON();
     event.preventDefault();
     // question.textContent = ;
     setTime();
     titleEl.setAttribute("style", "display: none");
-    questionArea.setAttribute("style", "display: flex");
-    if(event)
-
-    return;
+    questionArea.setAttribute("style", "display: flex", "flex-direction: column");
+    
 }
 
 // from youtube link
@@ -53,30 +59,54 @@ function setTime() {
         // Stops execution of action at set interval
         clearInterval(timerInterval);
         // Calls function to create and append image
-        sendMessage();
+        getScore();
       }
   
     }, 1000);
   }
-  //${'answer' + i}
-  //output: "answer1"
-  //ul[0].innerHTML = data.${'answer' +1 };
 
-  function nextQuestion(data){
-    var children = questionArea.children;
-    let i = 0;
-    data.forEach(element => {
-      console.log(element);
-    });
-    console.log(data[0]);
-
-    console.log(children[i]);
-    // children[i].innerHTML = data[questionNumnber][i];
-    // console.log(children);
-    // for(i = 1; i < children.length; i++) {
-    //   children[i].innerHTML= data[questionNumnber][i];
-    // }
+function nextQuestion(data){
+  console.log(questionNumnber + 1 + "heres the length:" + data.length);
+  if(questionNumnber + 1  == data.length) {
+    getScore();
   }
+  let dataAtNum = data[questionNumnber];
+  question.innerHTML = data[questionNumnber].question;
+  answerList[0].innerHTML = dataAtNum.answer1;
+  answerList[1].innerHTML = dataAtNum.answer2;
+  answerList[2].innerHTML = dataAtNum.answer3;
+  answerList[3].innerHTML = dataAtNum.answer4;
+  questionArea.addEventListener('click', function(event) {
+    var element = event.target;
+    if (element.matches("li")) {
+      questionNumnber++;
+      if(questionNumnber == data.length) {
+        getScore();
+        return;
+      }
+      console.log("you touches an li");
+      nextQuestion(data);
+    }
+  })
+}
   
-  startEl.addEventListener("click", startGame);
+startEl.addEventListener("click", startGame);
+
+function getScore() {
+  let score = secondsLeft;
+  questionArea.setAttribute("style", "display: none");
+  submissionArea.setAttribute("style", "display: flex");
+  document.querySelector("#score").innerHTML = "Your final score is " + score;
+  submitButton.addEventListener("click", function(event) {
+    event.preventDefault();
+    let initial = document.querySelector("#initials").value;
+    let scores = [initial, score];
+    highScores.push(scores);
+
+    console.log("here are some scores" + scores);
+
+    // need to fix array on making new scores!
+    // localStorage.setItem("scoreData", highScores);
+  } )
+}
 
