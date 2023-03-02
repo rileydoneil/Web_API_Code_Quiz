@@ -10,14 +10,18 @@ var submissionArea = document.querySelector(".submissionArea");
 var submitButton = document.querySelector("#submit");
 var highScores = [];
 //setup conditions
-var questionNumnber = 0;
+var questionNumber = 0;
 var secondsLeft = 120;
 
 //grab local storage
 function renderHighScore() {
-  highScores = localStorage.getItem("scoreData");
-  console.log(highScores);
-  return;
+  if(localStorage.getItem("highScore3") != null){
+    highScores.push(localStorage.getItem("highScore3"));
+  } else if (localStorage.getItem("highScore2") != null) {
+    highScores.push(localStorage.getItem("highScore2"));
+  } else if (localStorage.getItem("highScore1") != null) {
+    highScores.push(localStorage.getItem("highScore1"));
+  }
 }
 
 renderHighScore();
@@ -41,6 +45,27 @@ function getJSON() {
         .then(data => {
           //starts the first game
           nextQuestion(data);
+          function nextQuestion(data){
+            console.log(questionNumber + "heres the length:" + data.length);
+            if(questionNumber  != data.length) {
+              let dataAtNum = data[questionNumber];
+              question.innerHTML = data[questionNumber].question;
+              answerList[0].innerHTML = dataAtNum.answer1;
+              answerList[1].innerHTML = dataAtNum.answer2;
+              answerList[2].innerHTML = dataAtNum.answer3;
+              answerList[3].innerHTML = dataAtNum.answer4;
+            } else{
+              getScore();
+            }
+          }
+          questionArea.addEventListener('click', function(event) {
+            let element = event.target;
+            if (element.matches("li")) {
+              questionNumber++;
+              console.log("you touches an li and heres the qestionNumber" + questionNumber);
+              nextQuestion(data);
+            }
+          })
         })
         .catch((error) => {
             console.error(error);
@@ -65,35 +90,15 @@ function setTime() {
     }, 1000);
   }
 
-function nextQuestion(data){
-  console.log(questionNumnber + 1 + "heres the length:" + data.length);
-  if(questionNumnber + 1  == data.length) {
-    getScore();
-  }
-  let dataAtNum = data[questionNumnber];
-  question.innerHTML = data[questionNumnber].question;
-  answerList[0].innerHTML = dataAtNum.answer1;
-  answerList[1].innerHTML = dataAtNum.answer2;
-  answerList[2].innerHTML = dataAtNum.answer3;
-  answerList[3].innerHTML = dataAtNum.answer4;
-  questionArea.addEventListener('click', function(event) {
-    var element = event.target;
-    if (element.matches("li")) {
-      questionNumnber++;
-      if(questionNumnber == data.length) {
-        getScore();
-        return;
-      }
-      console.log("you touches an li");
-      nextQuestion(data);
-    }
-  })
-}
-  
+
+
+
+
 startEl.addEventListener("click", startGame);
 
 function getScore() {
   let score = secondsLeft;
+  timeEl.setAttribute("style", "display: none");
   questionArea.setAttribute("style", "display: none");
   submissionArea.setAttribute("style", "display: flex");
   document.querySelector("#score").innerHTML = "Your final score is " + score;
@@ -101,9 +106,16 @@ function getScore() {
     event.preventDefault();
     let initial = document.querySelector("#initials").value;
     let scores = [initial, score];
-    highScores.push(scores);
-
-    console.log("here are some scores" + scores);
+    for(let i = 0; i < 3; i++) {
+      if(highScores[i] != null){
+        if(score > highScores[i]) {
+          highScores[i] = score;
+        }
+      }  else {
+        highScores[i] = score;
+      }
+    }
+    console.log("here an array of scores" + highScores);
 
     // need to fix array on making new scores!
     // localStorage.setItem("scoreData", highScores);
