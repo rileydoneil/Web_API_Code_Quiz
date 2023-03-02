@@ -4,11 +4,9 @@ var timeEl = document.querySelector(".time");
 var startEl = document.querySelector("#start");
 var titleEl = document.querySelector("#title");
 var questionArea = document.querySelector(".questionArea");
+var answerList = document.querySelector("#answerList").children;
 var question = document.querySelector("#question")
-// var answer1 = document.querySelector("#A1");
-// var answer2 = document.querySelector("#A2")
-// var answer3 = document.querySelector("#A3");
-// var answer4 = document.querySelector("#A4");
+
 var questionNumnber = 0;
 
 var secondsLeft = 120;
@@ -21,10 +19,11 @@ function startGame(event) {
     // question.textContent = ;
     setTime();
     titleEl.setAttribute("style", "display: none");
-    questionArea.setAttribute("style", "display: flex");
-    if(event)
-
-    return;
+    questionArea.setAttribute("style", "display: flex", "flex-direction: column");
+    if (element.matches("li")) {
+      let state = element.getAttribute("data-number");
+      console.log("you pressed index:" + state);
+    }
 }
 
 // from youtube link
@@ -63,19 +62,16 @@ function setTime() {
   //ul[0].innerHTML = data.${'answer' +1 };
 
   function nextQuestion(data){
-    var children = questionArea.children;
-    let i = 0;
-    data.forEach(element => {
-      console.log(element);
-    });
-    console.log(data[0]);
+    let dataAtNum = data[questionNumnber];
 
-    console.log(children[i]);
-    // children[i].innerHTML = data[questionNumnber][i];
-    // console.log(children);
-    // for(i = 1; i < children.length; i++) {
-    //   children[i].innerHTML= data[questionNumnber][i];
-    // }
+
+    console.log("I am a data[questionNumnber][i]" + data[questionNumnber].question);
+    question.innerHTML = data[questionNumnber].question;
+    console.log(answerList[0]);
+    answerList[0].innerHTML = dataAtNum.answer1;
+    answerList[1].innerHTML = dataAtNum.answer2;
+    answerList[2].innerHTML = dataAtNum.answer3;
+    answerList[3].innerHTML = dataAtNum.answer4;
   }
   
   startEl.addEventListener("click", startGame);

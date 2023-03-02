@@ -24,7 +24,7 @@ header {
   .questionArea {
     display: none;
     width: auto;
-    flex-direction: row;
+    flex-direction: column;
   }
   .questionArea ul {
     display: flex;
@@ -37,7 +37,7 @@ header {
     color: whitesmoke;
   }
 
-  .question li :hover {
+  .question :hover {
     background-color: var(--pink);
   }
   
