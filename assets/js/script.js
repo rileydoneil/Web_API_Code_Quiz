@@ -13,14 +13,23 @@ var highScores = [];
 var questionNumber = 0;
 var secondsLeft = 120;
 
-//grab local storage
+//grab local storage and assign last place in 0 index
+//populated empty indexes as 0 to be used at end of game getScore()
 function renderHighScore() {
   if(localStorage.getItem("highScore3") != null){
     highScores.push(localStorage.getItem("highScore3"));
-  } else if (localStorage.getItem("highScore2") != null) {
+  } else {
+    highScores.push(0);
+  }
+  if (localStorage.getItem("highScore2") != null) {
     highScores.push(localStorage.getItem("highScore2"));
-  } else if (localStorage.getItem("highScore1") != null) {
+  } else {
+    highScores.push(0);
+  }
+  if (localStorage.getItem("highScore1") != null) {
     highScores.push(localStorage.getItem("highScore1"));
+  } else {
+    highScores.push(0);
   }
 }
 
@@ -111,8 +120,6 @@ function getScore() {
         if(score > highScores[i]) {
           highScores[i] = score;
         }
-      }  else {
-        highScores[i] = score;
       }
     }
     console.log("here an array of scores" + highScores);
