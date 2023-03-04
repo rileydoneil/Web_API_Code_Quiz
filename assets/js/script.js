@@ -117,8 +117,17 @@ function getScore() {
     let scores = [initial, score];
     for(let i = 0; i < 3; i++) {
       if(highScores[i] != null){
-        if(score > highScores[i]) {
-          highScores[i] = score;
+        if(highScores[i] < score) {
+          // highScores[i] = score;
+          if(highScores[i+1] != null) {
+            if(highScores[i+1] > score) {
+              highScores[i] = score;
+            } else {
+              highScores[i] = highScores[i + 1];
+            }
+          } else {
+            highScores[i] = score;
+          }
         }
       }
     }
