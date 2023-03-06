@@ -49,8 +49,21 @@ header {
     
   }
 
+  .highScoreArea {
+    display: none;
+    flex-direction: column;
+  }
+
+  .highScoreArea li {
+    list-style-type: none;
+    margin: 10px 0;
+    background-color: var(--purple);
+    color: whitesmoke;
+  }
+
   .question :hover {
     background-color: var(--pink);
   }
+
 
   
