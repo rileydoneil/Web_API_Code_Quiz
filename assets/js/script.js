@@ -1,6 +1,7 @@
 //for Json file https://www.youtube.com/watch?v=Fva57lcikK0
 var url = './json/data.JSON'
 var timeEl = document.querySelector(".time");
+var highScoreEl = document.querySelector(".viewHighScore");
 var startEl = document.querySelector("#start");
 var titleEl = document.querySelector("#title");
 var questionArea = document.querySelector(".questionArea");
@@ -8,6 +9,8 @@ var answerList = document.querySelector("#answerList").children;
 var question = document.querySelector("#question");
 var submissionArea = document.querySelector(".submissionArea");
 var submitButton = document.querySelector("#submit");
+var highScoreArea = document.querySelector(".highScoreArea");
+var scoreList = document.querySelector("#scoreList");
 var highScores = [];
 //setup conditions
 var questionNumber = 0;
@@ -15,6 +18,8 @@ var secondsLeft = 120;
 
 //grab local storage and assign last place in 0 index
 //populated empty indexes as 0 to be used at end of game getScore()
+
+//issue with local storage populating, I am thinking I need to json parse it.
 function renderHighScore() {
   if(localStorage.getItem("highScore3") != null){
     highScores.push(localStorage.getItem("highScore3"));
@@ -31,6 +36,7 @@ function renderHighScore() {
   } else {
     highScores.push(0);
   }
+  console.log("Heres the rendered scores" + highScores);
 }
 
 renderHighScore();
@@ -55,7 +61,6 @@ function getJSON() {
           //starts the first game
           nextQuestion(data);
           function nextQuestion(data){
-            console.log(questionNumber + "heres the length:" + data.length);
             if(questionNumber  != data.length) {
               let dataAtNum = data[questionNumber];
               question.innerHTML = data[questionNumber].question;
@@ -67,11 +72,19 @@ function getJSON() {
               getScore();
             }
           }
+          //nested function to transfer data without making global var
           questionArea.addEventListener('click', function(event) {
             let element = event.target;
+            let answer = data[questionNumber].correctAnswer;
             if (element.matches("li")) {
+              let value = element.getAttribute("data-number");
+              //checks whether answer is correct
+              if(value == answer) {
+                secondsLeft += 15;
+              } else {
+                secondsLeft -= 15;
+              }
               questionNumber++;
-              console.log("you touches an li and heres the qestionNumber" + questionNumber);
               nextQuestion(data);
             }
           })
@@ -132,9 +145,25 @@ function getScore() {
       }
     }
     console.log("here an array of scores" + highScores);
+    localStorage.setItem("highsScore1", highScores.pop());
+    localStorage.setItem("highsScore2", highScores.pop());
+    localStorage.setItem("highsScore3", highScores.pop());
+    highScoreScreen();
 
     // need to fix array on making new scores!
     // localStorage.setItem("scoreData", highScores);
   } )
 }
+
+function highScoreScreen() {
+  submissionArea.setAttribute("style", "display: none");
+  highScoreArea.setAttribute("style", "display: flex");
+  if (localStorage.getItem("highScore1") != 0) {
+    const newLi = document.createElement("li");
+    newLi.innerHTML = localStorage.getItem("highScore1");
+    scoreList.append(newLi);
+  }
+}
+
+highScoreEl.addEventListener("click",highScoreScreen());
 
