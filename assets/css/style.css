@@ -54,6 +54,11 @@ header {
     flex-direction: column;
   }
 
+  .highScoreArea ul {
+    display: flex;
+    flex-direction: column;
+  }
+
   .highScoreArea li {
     list-style-type: none;
     margin: 10px 0;
