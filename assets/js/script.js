@@ -1,5 +1,5 @@
 //for Json file https://www.youtube.com/watch?v=Fva57lcikK0
-var url = './json/data.JSON'
+var url = './assets/json/data.JSON'
 var timeEl = document.querySelector(".time");
 var highScoreEl = document.querySelector(".viewHighScore");
 var startEl = document.querySelector("#start");
@@ -21,22 +21,24 @@ var secondsLeft = 120;
 
 //issue with local storage populating, I am thinking I need to json parse it.
 function renderHighScore() {
+  let blank = JSON.parse('{"initial": "", "score": 0}');
   if(localStorage.getItem("highScore3") != null){
-    highScores.push(localStorage.getItem("highScore3"));
+    highScores.push(JSON.parse(localStorage.getItem("highScore3")));
   } else {
-    highScores.push(0);
+    highScores.push(blank);
   }
   if (localStorage.getItem("highScore2") != null) {
-    highScores.push(localStorage.getItem("highScore2"));
+    highScores.push(JSON.parse(localStorage.getItem("highScore2")));
   } else {
-    highScores.push(0);
+    highScores.push(blank);
   }
   if (localStorage.getItem("highScore1") != null) {
-    highScores.push(localStorage.getItem("highScore1"));
+    let arr = localStorage.getItem("highScore1");
+    highScores.push(JSON.parse(arr));
   } else {
-    highScores.push(0);
+    highScores.push(blank);
   }
-  console.log("Heres the rendered scores" + highScores);
+  console.log("Heres the rendered scores at index 0" + highScores);
 }
 
 renderHighScore();
@@ -127,27 +129,31 @@ function getScore() {
   submitButton.addEventListener("click", function(event) {
     event.preventDefault();
     let initial = document.querySelector("#initials").value;
-    let scores = [initial, score];
+    let scores = JSON.stringify({"initial": initial, "score": score});
+
     for(let i = 0; i < 3; i++) {
-      if(highScores[i] != null){
-        if(highScores[i] < score) {
+      debugger;
+        if(highScores[i].score < score) {
           // highScores[i] = score;
+          console.log("This is an obkject at i+1" + highScores[i+1] + "and here are scores" + scores);
           if(highScores[i+1] != null) {
-            if(highScores[i+1] > score) {
-              highScores[i] = score;
+            console.log("is " + highScores[i+1].score + "greater than " + score);
+            if(highScores[i+1].score > score) {
+              console.log("yes");
+              highScores[i] = scores;
             } else {
+              console.log("no");
               highScores[i] = highScores[i + 1];
             }
           } else {
-            highScores[i] = score;
+            highScores[i] = scores;
           }
-        }
       }
     }
     console.log("here an array of scores" + highScores);
-    localStorage.setItem("highsScore1", highScores.pop());
-    localStorage.setItem("highsScore2", highScores.pop());
-    localStorage.setItem("highsScore3", highScores.pop());
+    localStorage.setItem("highScore1", JSON.stringify(highScores[2]));
+    localStorage.setItem("highScore2", JSON.stringify(highScores[1]));
+    localStorage.setItem("highScore3", JSON.stringify(highScores[0]));
     highScoreScreen();
 
     // need to fix array on making new scores!
@@ -158,11 +164,14 @@ function getScore() {
 function highScoreScreen() {
   submissionArea.setAttribute("style", "display: none");
   highScoreArea.setAttribute("style", "display: flex");
-  if (localStorage.getItem("highScore1") != 0) {
-    const newLi = document.createElement("li");
-    newLi.innerHTML = localStorage.getItem("highScore1");
-    scoreList.append(newLi);
+  for(let i = 0; i < 3; i++) {
+    console.log(highScores[i]);
   }
+  // if (localStorage.getItem("highScore1") != 0) {
+  //   const newLi = document.createElement("li");
+  //   newLi.innerHTML = localStorage.getItem("highScore1");
+  //   scoreList.append(newLi);
+  // }
 }
 
 highScoreEl.addEventListener("click",highScoreScreen());
