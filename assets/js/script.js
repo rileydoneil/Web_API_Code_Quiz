@@ -11,10 +11,12 @@ var submissionArea = document.querySelector(".submissionArea");
 var submitButton = document.querySelector("#submit");
 var highScoreArea = document.querySelector(".highScoreArea");
 var scoreList = document.querySelector("#scoreList");
+highScoreArea.setAttribute("style", "display: none");
 var highScores = [];
 //setup conditions
 var questionNumber = 0;
 var secondsLeft = 120;
+var timerInterval;
 
 //grab local storage and assign last place in 0 index
 //populated empty indexes as 0 to be used at end of game getScore()
@@ -100,7 +102,7 @@ function getJSON() {
 //timer function
 function setTime() {
     // Sets interval in variable
-    var timerInterval = setInterval(function() {
+    timerInterval = setInterval(function() {
       secondsLeft--;
       timeEl.textContent = "Time: " + secondsLeft;
   
@@ -121,6 +123,7 @@ function setTime() {
 startEl.addEventListener("click", startGame);
 
 function getScore() {
+  clearInterval(timerInterval);
   let score = secondsLeft;
   timeEl.setAttribute("style", "display: none");
   questionArea.setAttribute("style", "display: none");
@@ -129,26 +132,46 @@ function getScore() {
   submitButton.addEventListener("click", function(event) {
     event.preventDefault();
     let initial = document.querySelector("#initials").value;
-    let scores = JSON.stringify({"initial": initial, "score": score});
+    let string = JSON.stringify({"initial": initial, "score": score});
+    let objScore = JSON.parse(string);
 
     for(let i = 0; i < 3; i++) {
-      debugger;
-        if(highScores[i].score < score) {
-          // highScores[i] = score;
-          console.log("This is an obkject at i+1" + highScores[i+1] + "and here are scores" + scores);
-          if(highScores[i+1] != null) {
-            console.log("is " + highScores[i+1].score + "greater than " + score);
-            if(highScores[i+1].score > score) {
-              console.log("yes");
-              highScores[i] = scores;
-            } else {
-              console.log("no");
-              highScores[i] = highScores[i + 1];
-            }
+      //this was a bad way to reorder scores 
+      //   if(highScores[i].score < score) {
+      //     // highScores[i] = score;
+      //     console.log("This is an obkject at i+1" + highScores[i+1] + "and here are scores" + scores);
+      //     if(highScores[i+1] != null) {
+      //       console.log("is " + highScores[i+1].score + "greater than " + score);
+      //       if(highScores[i+1].score > score) {
+      //         console.log("yes");
+      //         highScores[i] = scores;
+      //       } else {
+      //         console.log("no");
+      //         highScores[i] = highScores[i + 1];
+      //       }
+      //     } else {
+      //       highScores[i] = scores;
+      //     }
+      // }
+
+      //this compares the next index of highScores to reorder the highest score
+      let objAtIndex = highScores[i];
+      if(objAtIndex.score < objScore.score) {
+        if(highScores[i + 1] != null) {
+          let objNextIndex = highScores[i + 1];
+          if(objNextIndex.score > objScore.score) { 
+            highScores[i] = objScore;
           } else {
-            highScores[i] = scores;
+            highScores[i] = objNextIndex;
           }
+        } else {
+          if (objAtIndex.score < objScore.score) {
+            highScores[i] = objScore;
+          }
+        }
+        
       }
+
     }
     console.log("here an array of scores" + highScores);
     localStorage.setItem("highScore1", JSON.stringify(highScores[2]));
@@ -158,14 +181,23 @@ function getScore() {
 
     // need to fix array on making new scores!
     // localStorage.setItem("scoreData", highScores);
-  } )
+  })
 }
+
+// highScoreEl.addEventListener("click", highScoreScreen());
 
 function highScoreScreen() {
   submissionArea.setAttribute("style", "display: none");
   highScoreArea.setAttribute("style", "display: flex");
-  for(let i = 0; i < 3; i++) {
-    console.log(highScores[i]);
+  for(let i = 2; i > -1; i--) {
+    let objAtIndex = highScores[i];
+    if(objAtIndex.score != 0) {
+      const newLi = document.createElement('li');
+      newLi.innerHTML = objAtIndex.initial + " - " + objAtIndex.score;
+      scoreList.append(newLi);
+
+      console.log("heres a console log in Highscirescreen" + highScores[i]);
+    }
   }
   // if (localStorage.getItem("highScore1") != 0) {
   //   const newLi = document.createElement("li");
@@ -173,6 +205,3 @@ function highScoreScreen() {
   //   scoreList.append(newLi);
   // }
 }
-
-highScoreEl.addEventListener("click",highScoreScreen());
-
