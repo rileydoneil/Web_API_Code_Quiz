@@ -9,10 +9,12 @@ This assignment taught me how to go about making a trivia game with javascript l
 
 ## Resources
 https://www.youtube.com/watch?v=Fva57lcikK0 
+
 ## Screenshots
+<img width="1435" alt="image" src="https://user-images.githubusercontent.com/37202991/223479011-257198d9-d791-416a-9605-e27529254e86.png">
 
 ## View Live Site
 
-https://rileydoneil.github.io/
+https://rileydoneil.github.io/Web_API_Code_Quiz/
 
 [MIT](https://choosealicense.com/licenses/mit/)
